@@ -1,4 +1,6 @@
 import { useState } from "react";
+// 1. useQuery 불러오기
+import { useQuery } from "@tanstack/react-query";
 
 import { fetchPosts, deletePost, updatePost } from "./api";
 import { PostDetail } from "./PostDetail";
@@ -9,7 +11,15 @@ export function Posts() {
   const [selectedPost, setSelectedPost] = useState(null);
 
   // replace with useQuery
-  const data = [];
+  // 2. useQuery 실행하기
+  const { data } = useQuery({
+    queryKey: ["posts"],
+    queryFn: fetchPosts,
+  });
+
+  if (!data) {
+    return <div />;
+  }
 
   return (
     <>
