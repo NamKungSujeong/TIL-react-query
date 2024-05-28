@@ -12,15 +12,23 @@ export function Posts() {
 
   // replace with useQuery
   // 2. useQuery 실행하기
-  const { data } = useQuery({
+  const { data, isError, isLoading, error } = useQuery({
     queryKey: ["posts"],
     queryFn: fetchPosts,
   });
 
-  if (!data) {
-    return <div />;
+  if (isLoading) {
+    return <h3>Loaindg...</h3>;
   }
 
+  if (isError) {
+    return (
+      <>
+        <h3>Error....</h3>
+        <h3>{error.toString()}</h3>
+      </>
+    );
+  }
   return (
     <>
       <ul>
