@@ -1,6 +1,7 @@
 import { Posts } from "./Posts";
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient();
 // 새 쿼리클라이언트를 만들 수 있게 해줌
@@ -13,6 +14,7 @@ function App() {
         <h1>Blog &apos;em Ipsum</h1>
         <Posts />
       </div>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }
