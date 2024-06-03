@@ -29,7 +29,7 @@ export function Posts() {
   }, [currentPage, queryClient]);
 
   if (isLoading) {
-    return <h3>Loaindg...</h3>;
+    return <h3>Loading...</h3>;
   }
 
   if (isError) {
