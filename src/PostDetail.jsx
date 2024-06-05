@@ -25,9 +25,12 @@ export function PostDetail({ post, deleteMutation }) {
   return (
     <>
       <h3 style={{ color: "blue" }}>{post.title}</h3>
-      <button onClick={() => deleteMutation.mutate(post.id)}>
-        Delete
-      </button>{" "}
+      <div>
+        <button onClick={() => deleteMutation.mutate(post.id)}>Delete</button>
+        {deleteMutation.isPending && <p className="loading">Loading...</p>}
+        {deleteMutation.isError && <p className="error">Error...</p>}
+        {deleteMutation.isSuccess && <p className="success">Success</p>}
+      </div>
       <button>Update title</button>
       <p>{post.body}</p>
       <h4>Comments</h4>
