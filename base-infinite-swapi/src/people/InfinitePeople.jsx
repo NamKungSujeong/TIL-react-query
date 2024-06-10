@@ -9,7 +9,7 @@ const fetchUrl = async (url) => {
 };
 
 export function InfinitePeople() {
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
     // data : 페이지를 계속 로드할 때 여기에 data의 페이지가 포함
     // fetchNextPage : 더 많은 데이터가 필요할 때 어느 함수를 실행할지 infiniteScroll에 지시하는 역할
     // hasNextPage : 수집할 데이터가 더 있는지를 결정하는 boolean
@@ -26,5 +26,28 @@ export function InfinitePeople() {
       // HasNextPage는 이 함수가 undefined를 반환하는지에 아닌지에 따라 결정
     },
   });
-  return <InfiniteScroll />;
+  return (
+    <InfiniteScroll
+      loadMore={() => {
+        if (!isFetching) {
+          fetchNextPage();
+        }
+        // isFetching이 아니면 fetchNextPage() 실행해서 다음 페이지 가져오기
+      }}
+      hasMore={hasNextPage}
+    >
+      {data.pages.map((pageData) => {
+        return pageData.results.map((person) => {
+          return (
+            <Person
+              key={person.name}
+              name={person.name}
+              hairColor={person.hairColor}
+              eyeColor={person.eyeColor}
+            />
+          );
+        });
+      })}
+    </InfiniteScroll>
+  );
 }
