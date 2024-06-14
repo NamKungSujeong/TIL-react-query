@@ -32,7 +32,7 @@ export function InfiniteSpecies() {
   if (isError) {
     return <div className="error">Error {error.toString()}</div>;
   }
-  // TODO: get data for InfiniteScroll via React Query
+
   return (
     <>
       {isFetching && <div className="loading">Loading...</div>}
