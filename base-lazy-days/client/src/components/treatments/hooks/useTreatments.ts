@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import type { Treatment } from "@shared/types";
 
@@ -20,4 +20,13 @@ export function useTreatments(): Treatment[] {
   });
 
   return data;
+}
+
+export function usePrefetchTreatments(): void {
+  const queryClient = useQueryClient();
+  queryClient.prefetchQuery({
+    queryKey: [queryKeys.treatments],
+    // 어떤 쿼리, 어떤 useQuery가 캐시에서 이 데이터를 찾아야 하는지를 알려주기 때문에 키가 매우 중용
+    queryFn: getTreatments,
+  });
 }
