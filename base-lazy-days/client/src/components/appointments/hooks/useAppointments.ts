@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { useState } from "react";
 
@@ -61,7 +62,16 @@ export function useAppointments() {
   //
   //    2. The getAppointments query function needs monthYear.year and
   //       monthYear.month
-  const appointments: AppointmentDateMap = {};
+  const fallback: AppointmentDateMap = {};
+
+  const { data: appointments = fallback } = useQuery({
+    queryKey: [queryKeys.appointments, monthYear.year, monthYear.month],
+    // 모든 쿼리에 동일한 키를 사용할 경우 달력이 넘어가도 데이터가 바뀌지 않음
+    // 새 달을 로드하기 위해 화살표를 클릭해도 새로운 데이터를 다시 가져오기 위한 트리거가 없음
+    // 해결책은 매 달마다 새로운 키를 사용하는 것
+    // 따라서 키는 항상 종속성 배열로 처리해야 함
+    queryFn: () => getAppointments(monthYear.year, monthYear.month),
+  });
 
   /** ****************** END 3: useQuery  ******************************* */
 
