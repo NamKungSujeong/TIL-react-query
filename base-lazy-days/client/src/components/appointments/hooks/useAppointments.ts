@@ -69,7 +69,7 @@ export function useAppointments() {
     // 모든 쿼리에 동일한 키를 사용할 경우 달력이 넘어가도 데이터가 바뀌지 않음
     // 새 달을 로드하기 위해 화살표를 클릭해도 새로운 데이터를 다시 가져오기 위한 트리거가 없음
     // 해결책은 매 달마다 새로운 키를 사용하는 것
-    // 따라서 키는 항상 종속성 배열로 처리해야 함
+    // 이를 위해 키는 항상 종속성 배열로 처리해야 함
     queryFn: () => getAppointments(monthYear.year, monthYear.month),
   });
 
