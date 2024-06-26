@@ -1,6 +1,7 @@
+import { useEditable } from "@chakra-ui/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { AppointmentDateMap } from "../types";
 import { getAvailableAppointments } from "../utils";
@@ -9,7 +10,6 @@ import { getMonthYearDetails, getNewMonthYear } from "./monthYear";
 import { useLoginData } from "@/auth/AuthContext";
 import { axiosInstance } from "@/axiosInstance";
 import { queryKeys } from "@/react-query/constants";
-import { useEditable } from "@chakra-ui/react";
 
 // for useQuery call
 async function getAppointments(
@@ -66,6 +66,14 @@ export function useAppointments() {
   //   appointments that the logged-in user has reserved (in white)
   const { userId } = useLoginData();
 
+  const selectFn = useCallback(
+    (data: AppointmentDateMap, showAll: boolean) => {
+      if (showAll) return data;
+      return getAvailableAppointments(data, userId);
+    },
+    [userId]
+  );
+
   /** ****************** END 2: filter appointments  ******************** */
   /** ****************** START 3: useQuery  ***************************** */
   // useQuery call for appointments for the current monthYear
@@ -86,6 +94,7 @@ export function useAppointments() {
     // 해결책은 매 달마다 새로운 키를 사용하는 것
     // 이를 위해 키는 항상 종속성 배열로 처리해야 함.
     queryFn: () => getAppointments(monthYear.year, monthYear.month),
+    select: (data) => selectFn(data, showAll),
   });
 
   /** ****************** END 3: useQuery  ******************************* */
