@@ -20,6 +20,12 @@ function errorHandler(errorMsg: string) {
 
 // errorHandler를 뭐리태시 옵션에 제공해주기
 export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 600000,
+      gcTime: 900000,
+    },
+  },
   queryCache: new QueryCache({
     onError: (error) => {
       errorHandler(error.message);

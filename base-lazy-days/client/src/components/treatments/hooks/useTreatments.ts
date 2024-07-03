@@ -18,12 +18,13 @@ export function useTreatments(): Treatment[] {
     queryKey: [queryKeys.treatments],
     queryFn: getTreatments,
     staleTime: 600000,
-    gcTime: 900000,
-    // stale time이 가비지 수집 시간을 초과하면 표시할 내용이 전혀 없게 되기 때문에
-    // 가비지 시간도 늘려주기
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
+    // gcTime: 900000,
+    // // stale time이 가비지 수집 시간을 초과하면 표시할 내용이 전혀 없게 되기 때문에
+    // // 가비지 시간도 늘려주기
+    // refetchOnMount: false,
+    // refetchOnWindowFocus: false,
+    // refetchOnReconnect: false,
+    // 전역으로 설정하면서 여기서 따로 설정해주지 않아도 됨
   });
 
   return data;
@@ -35,7 +36,5 @@ export function usePrefetchTreatments(): void {
     queryKey: [queryKeys.treatments],
     // 어떤 쿼리, 어떤 useQuery가 캐시에서 이 데이터를 찾아야 하는지를 알려주기 때문에 키가 매우 중용
     queryFn: getTreatments,
-    staleTime: 600000,
-    gcTime: 900000,
   });
 }
