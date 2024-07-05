@@ -11,6 +11,13 @@ import { useLoginData } from "@/auth/AuthContext";
 import { axiosInstance } from "@/axiosInstance";
 import { queryKeys } from "@/react-query/constants";
 
+const commonOptions = {
+  staleTime: 0,
+  gcTime: 30000,
+};
+// appointments는 실시간으로 그 내용이 바뀔 수 있기 때문에
+// 기본값으로 설정된 리패치 시간보다 완화된 시간을 적용해서 리패치 처리를 해줌
+
 // for useQuery call
 async function getAppointments(
   year: string,
@@ -48,6 +55,7 @@ export function useAppointments() {
         nextMonthYear.month,
       ],
       queryFn: () => getAppointments(nextMonthYear.year, nextMonthYear.month),
+      ...commonOptions,
     });
   }, [monthYear, queryClient]);
 
@@ -95,6 +103,8 @@ export function useAppointments() {
     // 이를 위해 키는 항상 종속성 배열로 처리해야 함.
     queryFn: () => getAppointments(monthYear.year, monthYear.month),
     select: (data) => selectFn(data, showAll),
+    refetchOnWindowFocus: true,
+    ...commonOptions,
   });
 
   /** ****************** END 3: useQuery  ******************************* */
