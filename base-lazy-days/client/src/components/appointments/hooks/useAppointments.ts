@@ -104,6 +104,8 @@ export function useAppointments() {
     queryFn: () => getAppointments(monthYear.year, monthYear.month),
     select: (data) => selectFn(data, showAll),
     refetchOnWindowFocus: true,
+    refetchInterval: 1000,
+    // refetchInterval은 정말 편리하고 매우 쉬우며, 정기적으로 데이터를 최신 상태로 유지할 수 있음
     ...commonOptions,
   });
 
