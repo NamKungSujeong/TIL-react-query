@@ -44,7 +44,7 @@ export function UserProfile() {
       <Stack spacing={8} mx="auto" w="xl" py={12} px={6}>
         <UserAppointments />
         <Stack textAlign="center">
-          <Heading>Your information</Heading>
+          <Heading>{user?.name} information</Heading>
         </Stack>
         <Box rounded="lg" bg="white" boxShadow="lg" p={8}>
           <Formik
