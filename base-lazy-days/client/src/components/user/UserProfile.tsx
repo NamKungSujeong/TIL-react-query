@@ -8,11 +8,14 @@ import {
   Input,
   Stack,
 } from "@chakra-ui/react";
+import { useMutationState } from "@tanstack/react-query";
 import { Field, Form, Formik } from "formik";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { usePatchUser } from "./hooks/usePatchUser";
+import { User } from "@shared/types";
+
+import { MUTATION_KEY, usePatchUser } from "./hooks/usePatchUser";
 import { useUser } from "./hooks/useUser";
 import { UserAppointments } from "./UserAppointments";
 
@@ -32,6 +35,20 @@ export function UserProfile() {
     }
   }, [userId, navigate]);
 
+  const pendingData = useMutationState({
+    // useMutationState는 여러 변형을 관찰할 수 있으므로 필터가 필요
+    // mutateKey의 MUTATION_KEY를 기준으로 필터링
+    // 상태가 pending일 때만 이 pending 데이터를 사용
+    filters: { mutationKey: [MUTATION_KEY], status: "success" },
+    // 조건에 부합하는 모든 변형들의 보류 중인 데이터 배열을 얻을 수 있음
+    select: (mutation) => {
+      return mutation.state.variables as User;
+    },
+  });
+
+  // 보류 중인 데이터가 있다면 'pending user'는 보류 중인 데이터 배열의 첫 번째 항목이 될 것이고 그렇지 않으면 null
+  const pendingUser = pendingData ? pendingData[0] : null;
+
   const formElements = ["name", "address", "phone"];
   interface FormValues {
     name: string;
@@ -44,7 +61,9 @@ export function UserProfile() {
       <Stack spacing={8} mx="auto" w="xl" py={12} px={6}>
         <UserAppointments />
         <Stack textAlign="center">
-          <Heading>{user?.name} information</Heading>
+          <Heading>
+            {pendingUser ? pendingUser.name : user?.name} information
+          </Heading>
         </Stack>
         <Box rounded="lg" bg="white" boxShadow="lg" p={8}>
           <Formik
